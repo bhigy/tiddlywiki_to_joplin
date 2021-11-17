@@ -36,15 +36,19 @@ import csv
 import uuid
 import os
 import re        # needed to regexp basic format conversions
+import sys
 
 
 ###
 ### change these values
 ###
-#InputFile = 'tiddlers.csv'
-InputFile = '2019-04-01 1_tech_spellbook tiddlywiki export tiddlers.csv'
+InputFile = 'tiddlers.csv'
+#InputFile = '2019-04-01 1_tech_spellbook tiddlywiki export tiddlers.csv'
 OutputDir = 'tiddlywiki_notes'
-YourName  = 'James Derrick'
+YourName  = 'Bertrand Higy'
+
+
+csv.field_size_limit(sys.maxsize)
 
 
 def tiddler_to_markdown( text ):
@@ -150,18 +154,18 @@ with open(InputFile) as csv_file:
             print ('DEBUG SiteSubtitle - skip')
             continue
 
-        if (len(tiddler['creator'])  == 0):
-            tiddler['creator'] = YourName
+        #if (len(tiddler['creator'])  == 0):
+        #    tiddler['creator'] = YourName
 
         if (len(tiddler['modified'])  == 0):
             # An unmodified tiddler doesn't have all fields set, so use creation values
             #print ('DEBUG Unmodified - copy creation to modified')
             tiddler['modified'] = tiddler['created']
-            tiddler['modifier'] = tiddler['creator']
+            #tiddler['modifier'] = tiddler['creator']
 
         # convert text formats
             
-        TiddlerFile = open(OutputDir + '/' + note_id + '.md', 'x')
+        TiddlerFile = open(OutputDir + '/' + tiddler['title'] + '.md', 'x')
         print('DEBUG ', tiddler['title'])
 
         TiddlerFile.write(tiddler['title'] + '\n')
@@ -186,7 +190,7 @@ with open(InputFile) as csv_file:
         TiddlerFile.write('latitude: 55.088' + '\n')
         TiddlerFile.write('longitude: -1.5863' + '\n')
         TiddlerFile.write('altitude: 0.0000' + '\n')
-        TiddlerFile.write('author: ' + tiddler['creator'] + '\n')
+        TiddlerFile.write('author: ' + YourName + '\n')
         TiddlerFile.write('is_todo: 0' + '\n')
         TiddlerFile.write('todo_due: 0' + '\n')
         TiddlerFile.write(f'todo_completed: 0' + '\n')
